@@ -1,0 +1,378 @@
+{
+  "payload": {
+    "type": "hosted",
+    "stateful": false,
+    "hasAuthAdapter": false,
+    "serverCard": {
+      "serverInfo": {
+        "name": "MisarSEO",
+        "version": "0.2.0"
+      },
+      "tools": [
+        {
+          "name": "seo_list_projects",
+          "description": "List the MisarSEO projects available to you. Call this first to obtain a projectId for the other tools. Free — charges no credits.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {},
+            "$schema": "http://json-schema.org/draft-07/schema#"
+          },
+          "execution": {
+            "taskSupport": "forbidden"
+          }
+        },
+        {
+          "name": "seo_keyword_research",
+          "description": "Expand seed keyword(s) into keyword suggestions with search volume, difficulty, and CPC for a MisarSEO project. Charges credits — keep seed lists focused.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "projectId": {
+                "type": "string",
+                "minLength": 1,
+                "description": "MisarSEO project ID. Use seo_list_projects to find it."
+              },
+              "keywords": {
+                "minItems": 1,
+                "maxItems": 100,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "description": "Seed keyword(s); the first is treated as primary."
+              },
+              "locationCode": {
+                "description": "DataForSEO location code (default 2840 = United States).",
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991
+              },
+              "languageCode": {
+                "description": "Language code (default 'en').",
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 10
+              },
+              "resultLimit": {
+                "description": "Max keywords per seed: 150, 300, or 500 (default 150).",
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "const": 150
+                  },
+                  {
+                    "type": "number",
+                    "const": 300
+                  },
+                  {
+                    "type": "number",
+                    "const": 500
+                  }
+                ]
+              },
+              "mode": {
+                "description": "Research mode (default 'auto').",
+                "type": "string",
+                "enum": [
+                  "auto",
+                  "related",
+                  "suggestions",
+                  "ideas"
+                ]
+              },
+              "clickstream": {
+                "description": "Include clickstream-enriched volume data (default true).",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "projectId",
+              "keywords"
+            ],
+            "$schema": "http://json-schema.org/draft-07/schema#"
+          },
+          "execution": {
+            "taskSupport": "forbidden"
+          }
+        },
+        {
+          "name": "seo_crawl_site",
+          "description": "Start a MisarSEO site crawl/audit. Returns an auditId you can poll with seo_get_crawl_results.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "projectId": {
+                "type": "string",
+                "minLength": 1,
+                "description": "MisarSEO project ID. Use seo_list_projects to find it."
+              },
+              "url": {
+                "type": "string",
+                "format": "uri",
+                "description": "Root URL to crawl (e.g. 'https://example.com')."
+              },
+              "maxPages": {
+                "description": "Maximum pages to crawl. Defaults to the project plan limit.",
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991
+              }
+            },
+            "required": [
+              "projectId",
+              "url"
+            ],
+            "$schema": "http://json-schema.org/draft-07/schema#"
+          },
+          "execution": {
+            "taskSupport": "forbidden"
+          }
+        },
+        {
+          "name": "seo_get_crawl_results",
+          "description": "Get the status and results of a MisarSEO site audit. Poll until status is 'complete' or 'failed'.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "projectId": {
+                "type": "string",
+                "minLength": 1,
+                "description": "MisarSEO project ID."
+              },
+              "auditId": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Audit ID returned by seo_crawl_site."
+              }
+            },
+            "required": [
+              "projectId",
+              "auditId"
+            ],
+            "$schema": "http://json-schema.org/draft-07/schema#"
+          },
+          "execution": {
+            "taskSupport": "forbidden"
+          }
+        },
+        {
+          "name": "seo_rank_check",
+          "description": "Get rank tracker configs and the latest keyword position snapshots for a MisarSEO project. Free — charges no credits.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "projectId": {
+                "type": "string",
+                "minLength": 1,
+                "description": "MisarSEO project ID. Use seo_list_projects to find it."
+              },
+              "trackerId": {
+                "description": "Rank tracker config ID. If omitted, lists all rank trackers in the project.",
+                "type": "string"
+              }
+            },
+            "required": [
+              "projectId"
+            ],
+            "$schema": "http://json-schema.org/draft-07/schema#"
+          },
+          "execution": {
+            "taskSupport": "forbidden"
+          }
+        },
+        {
+          "name": "seo_rank_tracker_create",
+          "description": "Create a rank tracker config (domain + country + schedule) for a MisarSEO project. After creating, add keywords and run a check with seo_rank_check.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "projectId": {
+                "type": "string",
+                "minLength": 1,
+                "description": "MisarSEO project ID. Use seo_list_projects to find it."
+              },
+              "domain": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Domain to track rankings for (e.g. 'acme.com')."
+              },
+              "serpDepth": {
+                "type": "integer",
+                "minimum": 10,
+                "maximum": 100,
+                "description": "SERP scan depth, 10–100 in steps of 10 (e.g. 100)."
+              },
+              "locationCode": {
+                "description": "DataForSEO location code (default 2840 = United States).",
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991
+              },
+              "languageCode": {
+                "description": "Language code (default 'en').",
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 10
+              },
+              "devices": {
+                "description": "Which devices to track (default 'both').",
+                "type": "string",
+                "enum": [
+                  "desktop",
+                  "mobile",
+                  "both"
+                ]
+              },
+              "scheduleInterval": {
+                "description": "Auto-check cadence (default 'weekly').",
+                "type": "string",
+                "enum": [
+                  "daily",
+                  "weekly",
+                  "manual"
+                ]
+              }
+            },
+            "required": [
+              "projectId",
+              "domain",
+              "serpDepth"
+            ],
+            "$schema": "http://json-schema.org/draft-07/schema#"
+          },
+          "execution": {
+            "taskSupport": "forbidden"
+          }
+        },
+        {
+          "name": "seo_ai_radar",
+          "description": "Look up how a brand or domain is mentioned across AI platforms (ChatGPT, Google AI Overviews). Returns share of voice, top cited pages, and top prompts. Charges credits.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "projectId": {
+                "type": "string",
+                "minLength": 1,
+                "description": "MisarSEO project ID. Use seo_list_projects to find it."
+              },
+              "brand": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 250,
+                "description": "Brand name or domain to look up (e.g. 'Acme Corp' or 'acme.com')."
+              },
+              "competitors": {
+                "description": "Up to 5 competitor brands or domains to compare share of voice against.",
+                "maxItems": 5,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 250
+                }
+              },
+              "locationCode": {
+                "description": "DataForSEO location code (default 2840 = United States).",
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991
+              },
+              "languageCode": {
+                "description": "Language code (default 'en').",
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 8
+              }
+            },
+            "required": [
+              "projectId",
+              "brand"
+            ],
+            "$schema": "http://json-schema.org/draft-07/schema#"
+          },
+          "execution": {
+            "taskSupport": "forbidden"
+          }
+        },
+        {
+          "name": "seo_gsc_data",
+          "description": "Query Google Search Console performance data for a MisarSEO project: clicks, impressions, CTR, and average position. Free — charges no credits. Requires GSC to be connected in the project settings.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "projectId": {
+                "type": "string",
+                "minLength": 1,
+                "description": "MisarSEO project ID. Use seo_list_projects to find it."
+              },
+              "dateRange": {
+                "description": "Date range window (default 'last_28_days').",
+                "type": "string",
+                "enum": [
+                  "last_7_days",
+                  "last_28_days",
+                  "last_3_months",
+                  "last_6_months",
+                  "last_12_months",
+                  "last_16_months"
+                ]
+              },
+              "dimensions": {
+                "description": "Group rows by these dimensions (default ['query']).",
+                "minItems": 1,
+                "maxItems": 4,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "query",
+                    "page",
+                    "country",
+                    "device",
+                    "date",
+                    "searchAppearance"
+                  ]
+                }
+              },
+              "startDate": {
+                "description": "Explicit start date (YYYY-MM-DD). Use with endDate.",
+                "type": "string",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+              },
+              "endDate": {
+                "description": "Explicit end date (YYYY-MM-DD). Use with startDate.",
+                "type": "string",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+              },
+              "rowLimit": {
+                "description": "Max rows to return (default 1000).",
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 1000
+              }
+            },
+            "required": [
+              "projectId"
+            ],
+            "$schema": "http://json-schema.org/draft-07/schema#"
+          },
+          "execution": {
+            "taskSupport": "forbidden"
+          }
+        }
+      ],
+      "resources": [],
+      "prompts": []
+    },
+    "source": {
+      "commit": "5431022ed8dfb331e6f81397fc886956393ed7f4",
+      "branch": "chore/mcp-resubmit"
+    }
+  },
+  "artifacts": {
+    "module": "module.js",
+    "sourcemap": "module.js.map"
+  },
+  "name": "MisarSEO"
+}

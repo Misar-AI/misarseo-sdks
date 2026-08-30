@@ -1,0 +1,55 @@
+# smithery.yaml — Smithery listing config for @misar/seo-mcp
+# https://smithery.ai/docs/build/project-config
+#
+# WHAT THIS LISTS. The stdio server in this directory, run from npm on the
+# user's own machine. It deliberately does NOT list the in-app remote endpoint
+# at https://seo.misar.io/mcp, even though that endpoint exists and works:
+# Smithery's connect flow authenticates a remote server over OAuth, and this
+# deployment runs no OAuth authorization server (see src/lib/oauth-resource.ts —
+# /.well-known/oauth-protected-resource is a 404). A remote listing would give
+# every visitor a connect button that cannot complete. The stdio server takes an
+# API key through `configSchema` below, which is a flow Smithery can actually
+# drive. Document the remote URL on seo.misar.io/ai; list this.
+#
+# The previous version of this file could not be consumed by Smithery at all:
+# `config:` was a list where the schema wants a JSON Schema object under
+# `startCommand.configSchema`, there was no `commandFunction`, and the
+# `tools:` / `links:` blocks are not part of the config schema. That `tools:`
+# block also named 8 tools as if they were the set; the server registers 25.
+# Tools are discovered by scanning the running server, so they are not
+# enumerated here — a hand-maintained copy is a second source of truth that
+# drifts, which is exactly what happened.
+
+startCommand:
+  type: stdio
+  configSchema:
+    type: object
+    required:
+      - misarseoApiKey
+    properties:
+      misarseoApiKey:
+        type: string
+        title: MisarSEO API key
+        description: >-
+          A MisarSEO API key (starts with mseo_). Mint one from a signed-in
+          session at seo.misar.io via POST /api/keys. The key needs the "api"
+          scope, which is the default.
+      misarseoApiUrl:
+        type: string
+        title: API base URL
+        description: >-
+          Override the API base URL. Leave unset for the default
+          (https://api.misar.io/seo). Point this at your own host when running
+          self-hosted MisarSEO.
+  commandFunction: |-
+    (config) => ({
+      command: 'npx',
+      args: ['-y', '@misar/seo-mcp'],
+      env: Object.assign(
+        { MISARSEO_API_KEY: config.misarseoApiKey },
+        config.misarseoApiUrl ? { MISARSEO_API_URL: config.misarseoApiUrl } : {}
+      )
+    })
+  exampleConfig:
+    misarseoApiKey: mseo_example_key_replace_me
+    misarseoApiUrl: https://api.misar.io/seo

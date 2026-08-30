@@ -1,0 +1,45 @@
+{
+  "name": "@misar/seo-mcp",
+  "version": "0.2.0",
+  "description": "MisarSEO MCP server — keyword research, site audits, rank tracking, AI brand radar, and Google Search Console via the Model Context Protocol.",
+  "type": "module",
+  "bin": {
+    "misarseo-mcp": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1"
+  },
+  "devDependencies": {
+    "@types/node": "^22",
+    "typescript": "^5"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "keywords": [
+    "mcp",
+    "seo",
+    "keyword-research",
+    "rank-tracking",
+    "site-audit",
+    "ai-brand-radar",
+    "google-search-console",
+    "model-context-protocol",
+    "misarseo"
+  ],
+  "license": "MIT",
+  "homepage": "https://seo.misar.io",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/misar-ai/seo-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/misar-ai/seo-mcp/issues"
+  }
+}
