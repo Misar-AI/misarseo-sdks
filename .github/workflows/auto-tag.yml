@@ -1,0 +1,123 @@
+name: Auto-tag on version bump
+
+# Turns a deliberate version bump into a release tag, which is what actually
+# triggers publishing (see publish.yml). Copied from misarreach-sdks, with two
+# MisarSEO differences:
+#
+#   1. The SDK_PUBLISH_TARGETS repository variable gates what may be tagged —
+#      unset means a dry run that only reports. Set it to one language first,
+#      confirm that package on its registry, then widen to `all`.
+#   2. Go, Swift and PHP carry no manifest version; their version is the line
+#      in VERSION (repository root), and a change to it tags all three.
+#
+# Tag shape is `<language>/vX.Y.Z`. A Go module in the go/ subdirectory is ONLY
+# resolvable by a `go/vX.Y.Z` tag; Swift PM additionally needs a bare `vX.Y.Z`.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+          # MUST be a PAT: a tag pushed with GITHUB_TOKEN triggers no workflow,
+          # so publish.yml would never run.
+          token: ${{ secrets.RELEASE_TOKEN || github.token }}
+
+      - name: Warn if tags cannot trigger a publish
+        env:
+          RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        run: |
+          if [ -z "${RELEASE_TOKEN:-}" ]; then
+            echo "::warning::RELEASE_TOKEN is not set. Tags created with GITHUB_TOKEN cannot trigger publish.yml."
+          fi
+
+      - name: Tag every SDK whose version changed
+        env:
+          TARGETS: ${{ vars.SDK_PUBLISH_TARGETS }}
+        run: |
+          set -euo pipefail
+
+          allowed() {
+            case ",${TARGETS:-}," in
+              *",all,"*) return 0 ;;
+              *",$1,"*) return 0 ;;
+              *) return 1 ;;
+            esac
+          }
+
+          version_at() {
+            local ref="$1" lang="$2" file
+            case "$lang" in
+              typescript) file="typescript/package.json" ;;
+              cli)        file="cli/package.json" ;;
+              python)     file="python/pyproject.toml" ;;
+              rust)       file="rust/Cargo.toml" ;;
+              ruby)       file="ruby/lib/misarseo/version.rb" ;;
+              dart)       file="dart/pubspec.yaml" ;;
+              flutter)    file="flutter/pubspec.yaml" ;;
+              java)       file="java/pom.xml" ;;
+              kotlin)     file="kotlin/build.gradle.kts" ;;
+              csharp)     file="csharp/MisarSEO.csproj" ;;
+              fleet)      file="VERSION" ;;
+              *)          return 0 ;;
+            esac
+            local content
+            content="$(git show "${ref}:${file}" 2>/dev/null)" || return 0
+            case "$lang" in
+              typescript|cli) printf '%s' "$content" | jq -r '.version // empty' ;;
+              python|rust|kotlin) printf '%s' "$content" | grep -m1 -E '^version[[:space:]]*=' | grep -oE '"[^"]+"' | tr -d '"' ;;
+              ruby) printf '%s' "$content" | grep -m1 -E 'VERSION[[:space:]]*=' | grep -oE '"[^"]+"' | tr -d '"' ;;
+              dart|flutter) printf '%s' "$content" | grep -m1 -E '^version:' | awk '{print $2}' ;;
+              java) printf '%s' "$content" | tr -d '\n' | grep -oE '<artifactId>misarseo</artifactId>[[:space:]]*<version>[^<]+' | sed 's/.*<version>//' ;;
+              csharp) printf '%s' "$content" | grep -m1 -oE '<Version>[^<]+</Version>' | sed 's/<[^>]*>//g' ;;
+              fleet) printf '%s' "$content" | grep -v '^#' | grep -m1 -E '[0-9]' | tr -d '[:space:]' ;;
+            esac
+          }
+
+          if git rev-parse HEAD~1 >/dev/null 2>&1; then PREV="HEAD~1"; else PREV=""; fi
+
+          git config user.name  "Misar.AI"
+          git config user.email "noreply@misar.io"
+
+          tag() {
+            local name="$1"
+            if git rev-parse -q --verify "refs/tags/$name" >/dev/null; then
+              echo "! $name already exists — refusing to move a released tag"
+              return 0
+            fi
+            echo "+ $name"
+            git tag "$name"
+            git push origin "$name"
+          }
+
+          changed() {
+            local lang="$1" now old
+            now="$(version_at HEAD "$lang" || true)"
+            [ -n "$now" ] || return 1
+            if [ -n "$PREV" ]; then
+              old="$(version_at "$PREV" "$lang" || true)"
+              [ "$now" != "$old" ] || return 1
+            fi
+            echo "$now"
+          }
+
+          for LANG in typescript cli python rust ruby dart flutter java kotlin csharp; do
+            NOW="$(changed "$LANG")" || continue
+            if allowed "$LANG"; then tag "$LANG/v$NOW"; else echo "· $LANG/v$NOW — not in SDK_PUBLISH_TARGETS, dry run"; fi
+          done
+
+          if FLEET="$(changed fleet)"; then
+            for LANG in go swift php; do
+              if allowed "$LANG"; then tag "$LANG/v$FLEET"; else echo "· $LANG/v$FLEET — not in SDK_PUBLISH_TARGETS, dry run"; fi
+            done
+            # Swift PM accepts only a bare semver tag at the repository root.
+            if allowed swift; then tag "v$FLEET"; fi
+          fi
