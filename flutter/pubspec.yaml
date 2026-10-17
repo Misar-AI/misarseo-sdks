@@ -1,0 +1,32 @@
+name: misarseo_flutter
+description: "MisarSEO's API from Flutter apps: keyword research, site audits, rank tracking, backlinks and AI search visibility, with secure key storage, retries, typed plan-limit errors and SSE on iOS, Android, macOS and web."
+version: 1.0.0
+homepage: https://seo.misar.io
+repository: https://github.com/Misar-AI/misarseo-sdks
+issue_tracker: https://github.com/Misar-AI/misarseo-sdks/issues
+documentation: https://docs.misar.io/seo
+
+topics:
+  - seo
+  - keyword-research
+  - rank-tracking
+  - api-client
+  - secure-storage
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+  flutter: ">=3.10.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  http: ^1.2.0
+  flutter_secure_storage: ^9.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  # No assets or fonts needed for the SDK.

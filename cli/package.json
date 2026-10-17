@@ -1,0 +1,55 @@
+{
+  "name": "@misarseo/cli",
+  "version": "1.0.0",
+  "description": "MisarSEO from the terminal: every endpoint of the MisarSEO API (keyword research, site audits, rank tracking, backlinks, AI search visibility, Search Console, GA4) as a command, with plan-limit upgrade cards and live crawl progress.",
+  "type": "module",
+  "bin": {
+    "misarseo": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "prepublishOnly": "npm run typecheck && npm run test && npm run build"
+  },
+  "keywords": [
+    "misarseo",
+    "seo",
+    "cli",
+    "keyword-research",
+    "rank-tracking",
+    "site-audit",
+    "backlinks",
+    "search-console",
+    "misar"
+  ],
+  "author": "Misar.AI <noreply@misar.io> (https://misar.io)",
+  "license": "MIT",
+  "homepage": "https://seo.misar.io",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Misar-AI/misarseo-sdks.git",
+    "directory": "cli"
+  },
+  "bugs": {
+    "url": "https://github.com/Misar-AI/misarseo-sdks/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.9.3",
+    "vitest": "^3.0.0"
+  }
+}

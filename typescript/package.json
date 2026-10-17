@@ -1,0 +1,65 @@
+{
+  "name": "@misarseo/sdk",
+  "version": "1.0.0",
+  "description": "MisarSEO's API in TypeScript: keyword research, site audits, rank tracking, backlinks, AI search visibility, Search Console, GA4 and Business Profile — 221 typed methods, retries, plan-limit errors with the upgrade offer, SSE crawl progress. Formerly @misar/seo.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "prepublishOnly": "npm run typecheck && npm run test && npm run build"
+  },
+  "keywords": [
+    "misarseo",
+    "seo",
+    "seo-api",
+    "keyword-research",
+    "rank-tracking",
+    "site-audit",
+    "backlinks",
+    "search-console",
+    "ga4",
+    "ai-search",
+    "sdk",
+    "api-client",
+    "typescript",
+    "sse",
+    "misar"
+  ],
+  "author": "Misar.AI <noreply@misar.io> (https://misar.io)",
+  "license": "MIT",
+  "homepage": "https://seo.misar.io",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Misar-AI/misarseo-sdks.git",
+    "directory": "typescript"
+  },
+  "bugs": {
+    "url": "https://github.com/Misar-AI/misarseo-sdks/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "vitest": "^3.0.0"
+  }
+}

@@ -1,0 +1,40 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "misarseo"
+version = "1.0.0"
+description = "MisarSEO's API from Python: keyword research, site audits, rank tracking, backlinks, AI search visibility, Search Console, GA4 and Business Profile data — 221 methods, retries, typed plan-limit errors with the upgrade offer, SSE crawl progress."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "Misar.AI", email = "noreply@misar.io" }]
+keywords = ["misarseo", "seo", "keyword-research", "rank-tracking", "site-audit", "backlinks", "search-console", "ai-search", "api-client", "sdk"]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Topic :: Internet :: WWW/HTTP",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = ["httpx>=0.27"]
+
+[project.urls]
+Homepage = "https://seo.misar.io"
+Documentation = "https://docs.misar.io/seo"
+Repository = "https://github.com/Misar-AI/misarseo-sdks"
+Issues = "https://github.com/Misar-AI/misarseo-sdks/issues"
+Changelog = "https://github.com/Misar-AI/misarseo-sdks/blob/main/python/CHANGELOG.md"
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "build", "twine"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["misarseo"]
+
+[tool.hatch.build.targets.sdist]
+include = ["misarseo", "README.md", "LICENSE", "CHANGELOG.md", "manifest.json"]

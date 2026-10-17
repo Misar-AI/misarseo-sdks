@@ -1,0 +1,24 @@
+name: misarseo
+description: "MisarSEO's API from Dart: keyword research, site audits, rank tracking, backlinks, AI search visibility, Search Console, GA4 and Business Profile, with retries, typed plan-limit errors and SSE."
+version: 1.0.0
+homepage: https://seo.misar.io
+repository: https://github.com/Misar-AI/misarseo-sdks
+issue_tracker: https://github.com/Misar-AI/misarseo-sdks/issues
+documentation: https://docs.misar.io/seo
+
+topics:
+  - seo
+  - keyword-research
+  - rank-tracking
+  - api-client
+  - sse
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  http: ^1.2.0
+
+dev_dependencies:
+  test: ^1.25.0
+  lints: ^3.0.0

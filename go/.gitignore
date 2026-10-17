@@ -1,0 +1,3 @@
+# Nothing to build: the module is consumed from source.
+*.test
+*.out

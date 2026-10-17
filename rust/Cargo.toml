@@ -1,0 +1,29 @@
+[package]
+name = "misarseo"
+version = "1.0.0"
+edition = "2021"
+rust-version = "1.75"
+description = "Async Rust client for the MisarSEO API: keyword research, site audits, rank tracking, backlinks, AI search visibility, Search Console, GA4 and Business Profile. 221 methods, retries, typed plan-limit errors with the upgrade offer, SSE crawl progress."
+license = "MIT"
+authors = ["Misar.AI <noreply@misar.io>"]
+homepage = "https://seo.misar.io"
+repository = "https://github.com/Misar-AI/misarseo-sdks"
+documentation = "https://docs.misar.io/seo"
+# crates.io allows at most five keywords, each <= 20 chars.
+keywords = ["seo", "keyword-research", "rank-tracking", "site-audit", "api-client"]
+categories = ["api-bindings", "web-programming::http-client", "asynchronous"]
+readme = "README.md"
+include = ["src/**/*", "Cargo.toml", "README.md", "LICENSE", "CHANGELOG.md", "manifest.json"]
+
+[dependencies]
+reqwest = { version = "0.12", default-features = false, features = ["json", "stream", "rustls-tls"] }
+tokio = { version = "1", features = ["time"] }
+serde_json = "1"
+urlencoding = "2"
+futures-util = "0.3"
+bytes = "1"
+rand = "0.8"
+
+[dev-dependencies]
+wiremock = "0.6"
+tokio = { version = "1", features = ["full"] }

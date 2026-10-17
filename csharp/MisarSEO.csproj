@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <RootNamespace>MisarSEO</RootNamespace>
+    <AssemblyName>MisarSEO</AssemblyName>
+
+    <!-- NuGet metadata -->
+    <PackageId>MisarSEO</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>Misar.AI</Authors>
+    <Company>Misar.AI</Company>
+    <Description>.NET client for the MisarSEO API: keyword research, site audits, rank tracking, backlinks, AI search visibility, Search Console, GA4 and Business Profile. 221 methods over async/await, with retries, typed plan-limit exceptions carrying the upgrade offer, and SSE crawl progress.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <Copyright>Copyright (c) 2026 Misar.AI</Copyright>
+    <PackageProjectUrl>https://seo.misar.io</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Misar-AI/misarseo-sdks</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryBranch>main</RepositoryBranch>
+    <PackageTags>misarseo;seo;keyword-research;rank-tracking;site-audit;backlinks;search-console;ai-search;api-client;dotnet</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="" />
+    <InternalsVisibleTo Include="MisarSEO.Tests" />
+  </ItemGroup>
+
+  <!-- Tests/ is its own project; keep its sources out of the library glob. -->
+  <ItemGroup>
+    <Compile Remove="Tests/**" />
+    <None Remove="Tests/**" />
+  </ItemGroup>
+
+</Project>
