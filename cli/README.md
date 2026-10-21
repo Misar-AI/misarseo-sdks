@@ -192,10 +192,10 @@ Detection is by `code`, never by status: a quota block is a 429 and would otherw
 
 ```bash
 misarseo keywords research --body '{"projectId":"p","keywords":["seo"]}'
-# Plan limit reached: You've reached your Free plan's limit of 25 keyword lookups per day.
-#   * Pro ($19/month) — 250 keyword lookups per day
-# Upgrade to Pro to continue.
-# Upgrade: https://seo.misar.io/subscribe?plan=pro      (exit 3)
+# Plan limit reached: You've reached your Pro plan's limit of 250 keyword lookups per day.
+#   * Business ($999.99/month) — 1,000 keyword lookups per day
+# Upgrade to Business to continue.
+# Upgrade: https://seo.misar.io/subscribe?plan=business      (exit 3)
 ```
 
 ---
