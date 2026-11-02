@@ -236,6 +236,13 @@ export interface ResearchKeywordsInput {
    * defaults to false.
    */
   clickstream?: boolean;
+  /**
+   * Named `questionsOnly` on the wire. Keeps only question-phrased keywords
+   * (the Keyword Magic Tool "Questions" view). The flag is derived server-side
+   * from the wording, so this is a slice of the same cached run, not a
+   * separate billed request. Defaults to false.
+   */
+  questionsOnly?: boolean;
 }
 
 // `ResearchKeywordsResponse` and the row/diagnostic types it is built from live

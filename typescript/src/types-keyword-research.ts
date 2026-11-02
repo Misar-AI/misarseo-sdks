@@ -92,6 +92,8 @@ export interface KeywordResearchRow {
     | "transactional"
     | "navigational"
     | "unknown";
+  /** True when the query is phrased as a question. */
+  isQuestion: boolean;
 }
 
 /** One source the service tried, in the order it tried them. */
