@@ -25,6 +25,7 @@ import { pathToFileURL } from "node:url";
 /** sdk dir → [manifest path relative to the sdk dir, extractor] */
 const SOURCES = {
   typescript: ["package.json", (s) => JSON.parse(s).version],
+  python: ["pyproject.toml", (s) => match(s, /^version\s*=\s*"([^"]+)"/m)],
   rust: ["Cargo.toml", (s) => match(s, /^version\s*=\s*"([^"]+)"/m)],
   // The gemspec reads MisarSEO::VERSION, so the literal lives in version.rb.
   ruby: ["lib/misarseo/version.rb", (s) => match(s, /VERSION\s*=\s*"([^"]+)"/)],

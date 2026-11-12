@@ -19,11 +19,11 @@ registry, then widen:
 
 ```
 unset / empty   nothing is tagged; dry run
-ruby,rust       only those two
+python,rust     only those two
 all             every changed SDK
 ```
 
-A sync touching every SDK directory would otherwise release twelve packages at
+A sync touching every SDK directory would otherwise release thirteen packages at
 once, and a published version can never be replaced — npm's unpublish window is
 72 hours, crates.io and the Go module proxy are immutable, Maven Central has no
 delete at all. `scripts/check-sdk-release.mjs` runs before any credential is
@@ -39,6 +39,7 @@ creates. `scripts/sdk-versions.mjs` reads every declared version and
 | ---------- | ------------------- | ------------------ | -------------------------------------- |
 | TypeScript | `typescript/v1.0.0` | npm                | `@misarseo/sdk`                        |
 | CLI        | `cli/v1.0.0`        | npm                | `@misarseo/cli`                        |
+| Python     | `python/v1.0.0`     | PyPI               | `misarseo`                             |
 | Rust       | `rust/v1.0.0`       | crates.io          | `misarseo`                             |
 | Ruby       | `ruby/v1.0.0`       | RubyGems           | `misarseo`                             |
 | C#         | `csharp/v1.0.0`     | NuGet              | `MisarSEO`                             |
@@ -74,6 +75,7 @@ Set on `Misar-AI/misarseo-sdks` → Settings → Secrets → Actions.
 | Secret                                            | Used by                                |
 | ------------------------------------------------- | -------------------------------------- |
 | `NPM_TOKEN`                                       | npm (`@misarseo/sdk`, `@misarseo/cli`) |
+| `PYPI_API_TOKEN`                                  | PyPI                                   |
 | `CARGO_REGISTRY_TOKEN`                            | crates.io                              |
 | `RUBYGEMS_API_KEY`                                | RubyGems                               |
 | `NUGET_API_KEY`                                   | NuGet                                  |
@@ -87,6 +89,7 @@ Set on `Misar-AI/misarseo-sdks` → Settings → Secrets → Actions.
 
 - **npm** — org `misarseo`; token with publish access. Deprecate the old
   `@misar/seo` name if it was ever published.
+- **PyPI** — the project must exist before a token can publish to it.
 - **crates.io** — sign in with GitHub, generate a token.
 - **RubyGems** — the first `gem push` needs email confirmation.
 - **pub.dev** — publish `misarseo` (Dart) before `misarseo_flutter`.
