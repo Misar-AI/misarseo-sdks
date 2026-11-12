@@ -9,7 +9,6 @@ Every SDK covers the full public surface: all 221 methods in 36 resource groups,
 | Language | Registry | Package | Source |
 | --- | --- | --- | --- |
 | TypeScript | npm | `@misarseo/sdk` | [`typescript/`](./typescript) |
-| Python | PyPI | `misarseo` | [`python/`](./python) |
 | Go | Go modules | `github.com/Misar-AI/misarseo-sdks/go` | [`go/`](./go) |
 | Rust | crates.io | `misarseo` | [`rust/`](./rust) |
 | Java | Maven Central | `io.misar:misarseo` | [`java/`](./java) |

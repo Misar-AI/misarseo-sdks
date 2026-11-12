@@ -10,7 +10,7 @@
  *   node scripts/sdk-release-plan.mjs --all 1.2.0     # force every SDK (dispatch)
  *
  * Emits JSON:
- *   { "publish": { "python": "1.1.0", ... }, "sdks": ["python", ...] }
+ *   { "publish": { "rust": "1.1.0", ... }, "sdks": ["rust", ...] }
  *
  * A version that goes *down* is reported as an error rather than published —
  * registries treat a version as immutable, and a downgrade is almost always an

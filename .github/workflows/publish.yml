@@ -1,6 +1,6 @@
 name: Publish SDK
 
-# Fires on a per-SDK release tag: `<language>/vX.Y.Z`, e.g. `python/v1.0.0`.
+# Fires on a per-SDK release tag: `<language>/vX.Y.Z`, e.g. `rust/v1.0.0`.
 # auto-tag.yml creates these from a manifest version bump; you can also push one
 # by hand.
 #
@@ -12,13 +12,12 @@ name: Publish SDK
 #
 # One file rather than twelve near-identical ones. The TAG CONVENTION matches
 # misarmail-sdks and misarblog-sdks exactly — that is the part Go and the
-# tooling actually depend on — but the twelve jobs share a single gate and a
+# tooling actually depend on — but the publish jobs share a single gate and a
 # single place to fix a bug.
 #
-# Two registries need no stored credential here, because GitHub is a supported
-# OIDC provider for both: PyPI Trusted Publishing and pub.dev automated
-# publishing. That is a real security win over a self-hosted runner, where both
-# would require a long-lived token sitting in a secret store.
+# pub.dev needs no stored credential here, because GitHub is a supported OIDC
+# provider for its automated publishing. That is a real security win over a
+# self-hosted runner, where it would require a long-lived token in a secret store.
 
 on:
   push:
@@ -33,7 +32,6 @@ on:
           [
             typescript,
             cli,
-            python,
             rust,
             ruby,
             dart,
@@ -92,7 +90,7 @@ jobs:
             fi
           fi
 
-          KNOWN="typescript cli python rust ruby dart flutter java kotlin csharp go swift php"
+          KNOWN="typescript cli rust ruby dart flutter java kotlin csharp go swift php"
           if [[ " $KNOWN " != *" $SDK "* ]]; then
             echo "::error::Unknown SDK '$SDK'"; exit 1
           fi
@@ -124,25 +122,6 @@ jobs:
       - run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-  pypi:
-    needs: resolve
-    if: needs.resolve.outputs.sdk == 'python'
-    runs-on: ubuntu-latest
-    environment: release
-    permissions:
-      id-token: write # Trusted Publishing — no API token is stored anywhere
-    steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
-      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
-        with: { python-version: "3.12" }
-      - run: pip install --quiet build twine
-      - run: python -m build
-        working-directory: python
-      - run: twine check python/dist/*
-      - uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # release/v1
-        with:
-          packages-dir: python/dist
 
   crates:
     needs: resolve

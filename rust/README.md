@@ -96,7 +96,7 @@ Every group the client exposes, and every method on it — generated from [`mani
 | Resource | Methods | What it covers |
 | --- | --- | --- |
 | `seo.ai_search()` | `brand_lookup`, `brand_lookup_status`, `brand_scan_trend`, `citations`, `competitor_positioning`, `delete_brand_monitor`, `delete_tracked_prompt`, `list_brand_monitors`, `list_tracked_prompts`, `prompt_explorer`, `prompt_research`, `tracked_prompt_trend`, `upsert_brand_monitor`, `upsert_tracked_prompt` | Brand lookup, prompt explorer, brand monitors, tracked prompts, competitor positioning, prompt research, citations. |
-| `seo.direct_vendor_ai()` | `answer` | Answers from vendors' own APIs (You.com, DeepSeek, xAI, Meta AI, MiniMax). |
+| `seo.direct_vendor_ai()` | `answer` | Retired 2026-11-10: AI models are banned. Answers `AI_UNSUPPORTED` (HTTP 422). |
 
 ### Search engines and analytics
 

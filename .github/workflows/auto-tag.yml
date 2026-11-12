@@ -58,7 +58,6 @@ jobs:
             case "$lang" in
               typescript) file="typescript/package.json" ;;
               cli)        file="cli/package.json" ;;
-              python)     file="python/pyproject.toml" ;;
               rust)       file="rust/Cargo.toml" ;;
               ruby)       file="ruby/lib/misarseo/version.rb" ;;
               dart)       file="dart/pubspec.yaml" ;;
@@ -73,7 +72,7 @@ jobs:
             content="$(git show "${ref}:${file}" 2>/dev/null)" || return 0
             case "$lang" in
               typescript|cli) printf '%s' "$content" | jq -r '.version // empty' ;;
-              python|rust|kotlin) printf '%s' "$content" | grep -m1 -E '^version[[:space:]]*=' | grep -oE '"[^"]+"' | tr -d '"' ;;
+              rust|kotlin) printf '%s' "$content" | grep -m1 -E '^version[[:space:]]*=' | grep -oE '"[^"]+"' | tr -d '"' ;;
               ruby) printf '%s' "$content" | grep -m1 -E 'VERSION[[:space:]]*=' | grep -oE '"[^"]+"' | tr -d '"' ;;
               dart|flutter) printf '%s' "$content" | grep -m1 -E '^version:' | awk '{print $2}' ;;
               java) printf '%s' "$content" | tr -d '\n' | grep -oE '<artifactId>misarseo</artifactId>[[:space:]]*<version>[^<]+' | sed 's/.*<version>//' ;;
@@ -109,7 +108,7 @@ jobs:
             echo "$now"
           }
 
-          for LANG in typescript cli python rust ruby dart flutter java kotlin csharp; do
+          for LANG in typescript cli rust ruby dart flutter java kotlin csharp; do
             NOW="$(changed "$LANG")" || continue
             if allowed "$LANG"; then tag "$LANG/v$NOW"; else echo "· $LANG/v$NOW — not in SDK_PUBLISH_TARGETS, dry run"; fi
           done
